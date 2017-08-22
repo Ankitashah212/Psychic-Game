@@ -11,56 +11,76 @@
 <body>
     <h1> Guess My Letter</h1>
     <script>
-        var tried = [8];
-        var blank = [8];
+        var maxTurns = 8;
+        var tried = [maxTurns];
         var remainingTry = 8;
         var myGuess;
         var answer = getRandomAlpha(65, 90);
         var counter = 0;
         var success = 0;
         var fails = 0;
-        var maxTurns = 8;
         console.log("answer" + answer);
+
         function getRandomAlpha(min, max) {
             //define a range of 26 (max -min) numbers for math.random and start with min number
             return Math.floor(Math.random() * (max - min + 1)) + min;
         }
 
-
+        function reset(counter, tried, answer) {
+            counter = 0;
+            tried = [];
+            answer = getRandomAlpha(65, 90);
+            console.log("new answer ", answer);
+            document.getElementById("guessed").innerText = "Letters alredy guessed :";
+            document.getElementById("remain").innerText = "Turns Left : ";
+            document.getElementById("turns").innerText = "Number of guesses : ";
+        }
 
         document.onkeyup = function (e) {
             myGuess = e.which;
-
+            // only track if it's character
             if (myGuess >= 65 && myGuess <= 90) {
                 //console.log(String.fromCharCode(e.keyCode), "my guess");
                 console.log(myGuess);
                 if (myGuess == answer) {
+
                     success++;
                     document.getElementById("success").innerText = ("success: " + success);
+                    // reset everything
+                    counter = 0;
+                    tried = [];
                     answer = getRandomAlpha(65, 90);
                     console.log("new answer ", answer);
+                    document.getElementById("guessed").innerText = "Letters alredy guessed :";
+                    document.getElementById("remain").innerText = "Turns Left : ";
+                    document.getElementById("turns").innerText = "Number of guesses : ";
 
                 } else {
                     tried[counter] = (String.fromCharCode(e.keyCode));
                     document.getElementById("guessed").innerText += tried[counter];
-                    if (counter >= 0 && counter < 8) {
+
+                    if (counter >= 0 && counter < maxTurns) {
+                        //every failed attempt
                         document.getElementById("guessed").innerText += " , ";
-                        document.getElementById("turns").innerText = "Your guesses : " + (counter+1);
-                        document.getElementById("remain").innerText = "Turns Left : " + (7-counter);
-                        
+                        document.getElementById("turns").innerText = "Number of guesses : " + (counter + 1);
+                        document.getElementById("remain").innerText = "Turns Left : " + (7 - counter);
+
                     }
-                    counter++;
-                    if (counter > 7) {
+                    //last failed attempt
+                    if (counter > (maxTurns - 1)) {
                         fails++;
                         document.getElementById("fails").innerText = ("Fails: " + fails);
+                        // reset everything
                         counter = 0;
-                        tried = [8];
+                        tried = [];
                         answer = getRandomAlpha(65, 90);
                         console.log("new answer ", answer);
                         document.getElementById("guessed").innerText = "Letters alredy guessed :";
-
+                        document.getElementById("remain").innerText = "Turns Left : ";
+                        document.getElementById("turns").innerText = "Number of guesses : ";
 
                     }
+                    counter++;
 
                 }
 
@@ -84,8 +104,10 @@
         Fails:
     </p>
     <p id="turns">
+        Number of guesses : 
     </p>
     <p id="remain">
+        Turns Left : 
     </p>
 </body>
 
