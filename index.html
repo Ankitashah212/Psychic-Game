@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Guess My Letter</title>
+</head>
+
+<body>
+    <h1> Guess My Letter</h1>
+    <script>
+        var tried = [8];
+        var blank = [8];
+        var remainingTry = 8;
+        var myGuess;
+        var answer = getRandomAlpha(65, 90);
+        var counter = 0;
+        var success = 0;
+        var fails = 0;
+        var maxTurns = 8;
+        console.log("answer" + answer);
+        function getRandomAlpha(min, max) {
+            //define a range of 26 (max -min) numbers for math.random and start with min number
+            return Math.floor(Math.random() * (max - min + 1)) + min;
+        }
+
+
+
+        document.onkeyup = function (e) {
+            myGuess = e.which;
+
+            if (myGuess >= 65 && myGuess <= 90) {
+                //console.log(String.fromCharCode(e.keyCode), "my guess");
+                console.log(myGuess);
+                if (myGuess == answer) {
+                    success++;
+                    document.getElementById("success").innerText = ("success: " + success);
+                    answer = getRandomAlpha(65, 90);
+                    console.log("new answer ", answer);
+
+                } else {
+                    tried[counter] = (String.fromCharCode(e.keyCode));
+                    document.getElementById("guessed").innerText += tried[counter];
+                    if (counter >= 0 && counter < 8) {
+                        document.getElementById("guessed").innerText += " , ";
+                        document.getElementById("turns").innerText = "Your guesses : " + (counter+1);
+                        document.getElementById("remain").innerText = "Turns Left : " + (7-counter);
+                        
+                    }
+                    counter++;
+                    if (counter > 7) {
+                        fails++;
+                        document.getElementById("fails").innerText = ("Fails: " + fails);
+                        counter = 0;
+                        tried = [8];
+                        answer = getRandomAlpha(65, 90);
+                        console.log("new answer ", answer);
+                        document.getElementById("guessed").innerText = "Letters alredy guessed :";
+
+
+                    }
+
+                }
+
+            }
+        }
+    </script>
+
+    <p>
+        Press any letter key to guess
+
+    </p>
+
+    <p id="guessed">
+        Letters alredy guessed :
+
+    </p>
+    <p id="success">
+        Success:
+    </p>
+    <p id="fails">
+        Fails:
+    </p>
+    <p id="turns">
+    </p>
+    <p id="remain">
+    </p>
+</body>
+
+</html>
